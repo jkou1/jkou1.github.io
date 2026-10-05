@@ -1,1 +1,133 @@
-# jkou1.github.io
+# Johan’s portfolio
+
+A two-page portfolio built with React, TypeScript, Vite, Motion, and CSS. The Gen X Soft Club palette combines misty blue, sage, lavender, silver-gray, and charcoal. Vercel hosts both the frontend and the Spotify API function at `/api/now-playing`. No paid animation tools, database, or Pinterest API are required.
+
+## Run locally
+
+Install Node.js 22.12+ (Node 22 LTS recommended), then:
+
+```sh
+npm ci
+npm run dev
+```
+
+Open `http://127.0.0.1:5173`. Both `/` and `/board/` are real build entry points. Vercel rewrites `/board` and `/board/` to the board entry, so direct links, keyboard navigation, and refreshes work. The Vite development server also serves the Spotify endpoint locally.
+
+```sh
+npm run build       # Type checking and production build
+npm test            # Spotify backend behavior tests
+npx playwright install chromium
+npm run test:e2e    # Desktop and mobile browser tests
+npm run preview    # Static build preview (no API; use npm run dev for Spotify)
+```
+
+## Navigation and interactions
+
+- Right / Down / D / S: move to the board.
+- Left / Up / A / W: move home.
+- Links and the floating navigation control also switch pages.
+- Shortcuts do not intercept typing, modifier combinations, focused controls, or an open image dialog. Held keys do not repeat transitions.
+- Click a board image to enlarge it; close with Escape, the close button, or the backdrop. Focus returns to the original image. Page content is inert while the dialog is open.
+- Drag the listening window by its title bar on desktop; it sits in the document flow on mobile. The minus button minimizes it.
+- Reduced-motion settings disable continuous animation and simplify transitions.
+
+## Personalize the content
+
+Edit `src/content.ts` for your name, introduction, project information, GitHub URL, optional email, and optional Pinterest board URL. The current project cards are explicitly labeled concept previews, not claims about completed work.
+
+Edit `src/board.json` to replace the eight original SVG placeholder studies with your chosen images:
+
+```json
+{
+  "id": "unique-pin-id",
+  "title": "Your caption",
+  "category": "Spaces",
+  "image": "/images/my-image.webp",
+  "alt": "A meaningful description of the image",
+  "pinUrl": "https://www.pinterest.com/pin/YOUR_PIN_ID/",
+  "sample": false
+}
+```
+
+Put images you can use in `public/images/`. All starter art in `public/art/` was authored for this project. The gallery is manually curated; it does not automatically import or scrape Pinterest. The category filters are derived from the JSON file. Add the board URL to `profile.pinterest` to display a Pinterest link. Colors and typography live in `src/styles.css`; fonts currently load from Google Fonts, with system fallbacks.
+
+## Connect Spotify
+
+Only the portfolio owner authorizes Spotify. Visitors do not log in, and they cannot control your playback. This integration displays track metadata, artwork, and approximate elapsed time. The equalizer is decorative, not a measured audio spectrum. Without configuration, the window says live listening is coming soon.
+
+### 1. Register an app and authorize locally
+
+Create an app at the [Spotify developer dashboard](https://developer.spotify.com/dashboard). Add this exact redirect URI:
+
+```text
+http://127.0.0.1:8888/callback
+```
+
+Spotify permits HTTP for this explicit loopback address. Do not substitute `localhost`. Your Premium account satisfies Spotify’s current development-mode owner requirement. Use your own app-owner account when authorizing, and check the dashboard’s allowlist if Spotify reports an access error.
+
+Copy `.env.spotify.example` to `.env.spotify`, then enter your Spotify app’s client ID and client secret locally. Never commit or send these credentials in chat.
+
+```sh
+npm run spotify:connect
+```
+
+Open the printed authorization URL. The helper validates OAuth state, exchanges the code, and saves all three credentials in the ignored `.env.spotify` file. It never prints your secret or refresh token. Run the helper on the computer whose browser you use for the callback.
+
+### 2. Try Spotify locally
+
+Restart `npm run dev` after authorizing. It reads server-only credentials from `.env.spotify` and serves `/api/now-playing` on the same local origin. There is no separate backend server to start and no frontend environment variable to configure.
+
+Play a track on Spotify; the window should update within about 20 seconds. Paused, idle, unsupported media, upstream errors, and expired authorization are handled without fabricating a listening history. If credentials are missing, the endpoint returns an explicit unconfigured state.
+
+### 3. Add Spotify credentials to Vercel
+
+In your Vercel project, open **Settings → Environment Variables** and add the values from your local `.env.spotify`:
+
+| Variable | Purpose |
+| --- | --- |
+| `SPOTIFY_CLIENT_ID` | Spotify app identifier |
+| `SPOTIFY_CLIENT_SECRET` | Spotify app secret |
+| `SPOTIFY_REFRESH_TOKEN` | Authorization for your listening status |
+
+Select **Production** and, if you want live Spotify on previews, **Preview**. Redeploy after changing these variables. They are server-only: **never prefix them with `VITE_`**. `.gitignore` and `.vercelignore` exclude local credential files from commits and CLI uploads.
+
+The frontend defaults to `/api/now-playing`; `VITE_SPOTIFY_ENDPOINT` is only an optional public override used by browser tests. Remove any old override pointing to Cloudflare. The backend caches public metadata for 15 seconds, shares concurrent requests, reuses access tokens, and respects Spotify rate-limit backoff. Errors and unconfigured responses are not cached. Reconnect and update Vercel's variables if Spotify authorization is revoked.
+
+## Deploy to Vercel
+
+The repository includes `vercel.json` with the Vite framework preset, `npm ci`, `npm run build`, `dist` output, board routing, and the Spotify function configuration. Node.js is pinned to 22.x. A personal portfolio can use Vercel's Hobby plan within its usage limits; this project does not require paid services or storage.
+
+### Connect the GitHub repository
+
+1. Push the reviewed changes to GitHub.
+2. In Vercel, choose **Add New → Project** and import `jkou1/jkou1.github.io`. The repository can keep its current name.
+3. Use the repository root and the **Vite** preset. The committed configuration supplies the build settings.
+4. Add the three Spotify variables above, or deploy first and connect Spotify later.
+5. Deploy. Vercel supplies a `*.vercel.app` address; future pushes to the production branch deploy automatically, and other branches can get preview deployments.
+
+Alternatively, with the [Vercel CLI](https://vercel.com/docs/cli):
+
+```sh
+npx vercel login
+npx vercel link
+npx vercel              # Preview deployment
+npx vercel --prod       # Production deployment
+```
+
+A Vercel account/project connection is needed before publishing. Local builds and tests do not publish anything.
+
+### Finish the hosting migration
+
+The GitHub Pages deployment workflow, Jekyll configuration, and `.nojekyll` file have been removed. The remaining GitHub workflow only checks tests and builds; deployment is handled by Vercel's Git integration. The Cloudflare Worker configuration and Wrangler dependency have also been removed, since Spotify now runs on Vercel.
+
+After verifying the Vercel deployment, unpublish the old Pages site under **GitHub repository Settings → Pages** if it is live. This repository change does not alter the existing remote Pages setting. GitHub owns `jkou1.github.io`, so that hostname cannot be attached to Vercel; use the Vercel hostname or a custom domain. If you have a custom domain, add it to the Vercel project and follow its DNS instructions after the new deployment works.
+
+## References
+
+- [Vite on Vercel](https://vercel.com/docs/frameworks/frontend/vite)
+- [Vercel Node.js functions](https://vercel.com/docs/functions/runtimes/node-js)
+- [Vercel cache-control headers](https://vercel.com/docs/caching/cache-control-headers)
+- [Spotify authorization code flow](https://developer.spotify.com/documentation/web-api/tutorials/code-flow)
+- [Spotify redirect URI rules](https://developer.spotify.com/documentation/web-api/concepts/redirect_uri)
+- [Spotify development mode](https://developer.spotify.com/documentation/web-api/concepts/quota-modes)
+- [Motion shared layout animations](https://motion.dev/docs/react-layout-animations)

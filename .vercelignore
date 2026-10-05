@@ -1,0 +1,8 @@
+.env*
+.spotify-secrets.json
+worker/.dev.vars*
+worker/.spotify-secrets.json
+test-results/
+playwright-report/
+node_modules/
+dist/
