@@ -1,4 +1,4 @@
-import { createNowPlayingHandler } from '../server/now-playing';
+import { createNowPlayingHandler } from '../server/now-playing.js';
 
 const handle = createNowPlayingHandler();
 

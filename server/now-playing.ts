@@ -1,4 +1,4 @@
-import { createSpotifyService, type SpotifyEnv, UpstreamError } from './spotify';
+import { createSpotifyService, type SpotifyEnv, UpstreamError } from './spotify.js';
 
 export function createNowPlayingHandler(service = createSpotifyService()) {
   return async (request: Request, env: SpotifyEnv): Promise<Response> => {
