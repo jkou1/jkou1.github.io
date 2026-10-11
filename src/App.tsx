@@ -50,7 +50,11 @@ export function App() {
   }, [page]);
 
   return <>
-    <div className="site-shell">
+    {page === 'home' && <div className="home-backdrop" aria-hidden="true">
+      <img className="home-ascii home-ascii-upper-left" src="/art/ascii-upper-left.svg" alt="" />
+      <img className="home-ascii home-ascii-lower-right" src="/art/ascii-lower-right.svg" alt="" />
+    </div>}
+    <div className={`site-shell${page === 'home' ? ' is-home' : ''}`}>
       <a className="skip-link" href="#main">Skip to content</a>
       <header className="site-header">
         <a className="wordmark" href="/" onClick={event => { if (!event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) { event.preventDefault(); navigate('home'); } }}>{profile.name.toLowerCase()}<span>✳</span></a>

@@ -1,6 +1,6 @@
 # Johan’s portfolio
 
-A two-page portfolio built with React, TypeScript, Vite, Motion, and CSS. The Gen X Soft Club palette combines misty blue, sage, lavender, silver-gray, and charcoal. Vercel hosts both the frontend and the Spotify API function at `/api/now-playing`. No paid animation tools, database, or Pinterest API are required.
+A two-page portfolio built with React, TypeScript, Vite, Motion, and CSS. The Gen X Soft Club palette combines washed teal and aqua, steel blue, sage and jade, chalky white, silver-gray, warm beige, and deep slate accents. Vercel hosts both the frontend and the Spotify API function at `/api/now-playing`. No paid animation tools, database, or Pinterest API are required.
 
 ## Run locally
 
@@ -44,6 +44,8 @@ To switch boards, update `profile.pinterest` in `src/content.ts` with the full p
 The widget script loads only when the board page is visited and is reused on return visits. Its DOM is managed separately from React. If Pinterest is unavailable or blocked, visitors can still use the direct board links. The old placeholder gallery, filters, and image dialog have been replaced by Pinterest's own layout.
 
 Colors and typography live in `src/styles.css`; fonts currently load from Google Fonts, with system fallbacks. All starter art in `public/art/` was authored for this project; two images are still used by the home page's project previews.
+
+The supplied `ascii-art.txt` and `ascii-art (1).txt` are rendered as transparent SVGs in `public/art/ascii-upper-left.svg` and `public/art/ascii-lower-right.svg`. They decorate the upper-left and lower-right corners of the home page, scale without cropping, and do not intercept clicks. The footer reserves space for the lower artwork above the floating navigation.
 
 ## Connect Spotify
 
