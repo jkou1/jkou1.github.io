@@ -16,6 +16,11 @@ export type Obsession = {
 // Add your YouTube links here, with a title, category, and optional personal note.
 export const obsessions: Obsession[] = [
   {
+    title: 'New Order - Crystal (Official Music Video)',
+    url: 'https://www.youtube.com/watch?v=KVMyXDsadLQ',
+    category: 'Music',
+  },
+  {
     title: 'Yamaha R6 - Akrapovic Exaust',
     url: 'https://www.youtube.com/watch?v=yVTY7Ti9Dws',
     category: 'Motors',
