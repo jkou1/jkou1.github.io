@@ -53,7 +53,10 @@ export function App() {
     <div className="site-shell">
       <a className="skip-link" href="#main">Skip to content</a>
       <header className="site-header">
-        <a className="wordmark" href="/" onClick={event => { if (!event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) { event.preventDefault(); navigate('home'); } }}>{profile.name.toLowerCase()}<span>✳</span></a>
+        <div className="site-brand">
+          <a className="wordmark" href="/" onClick={event => { if (!event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) { event.preventDefault(); navigate('home'); } }}>{profile.name.toLowerCase()}<span>✳</span></a>
+          {page === 'home' ? <h1 className="brand-quote">Style is the difference, a way of doing, a way of being done.</h1> : <p className="brand-quote">Style is the difference, a way of doing, a way of being done.</p>}
+        </div>
         <nav aria-label="Main navigation">
           {(['home', 'board'] as Page[]).map((item, index) => <a key={item} href={item === 'home' ? '/' : '/board/'} aria-current={page === item ? 'page' : undefined} onClick={event => { if (!event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) { event.preventDefault(); navigate(item); } }}><span className="nav-index">0{index + 1}</span>{item === 'home' ? 'Home' : 'The board'}{page === item && <motion.span layoutId="nav-dot" className="nav-dot" />}</a>)}
         </nav>
@@ -79,7 +82,6 @@ export function App() {
           <button aria-label={`Next page: ${page === 'home' ? 'The board' : 'Home'}`} onClick={() => navigate(page === 'home' ? 'board' : 'home', true, 1)}>→</button>
           <span className="key-hint">ARROWS / WASD</span>
         </div>
-        {page === 'home' && <h1 className="home-caption">Style is the difference, a way of doing, a way of being done.</h1>}
       </div>
     </div>
   </>;
@@ -90,10 +92,7 @@ function Home({ onBoard }: { onBoard: () => void }) {
   return <>
     <section className="art-hero" aria-label="ASCII artwork" ref={hero}>
       <SpotifyCard constraints={hero} />
-    </section>
-    <section className="home-details">
-      <div className="hero-bottom"><p>Hey, I’m {profile.name}.<br />{profile.intro}</p><a className="round-link" href="#obsessions" aria-label="Explore current obsessions">↓</a></div>
-      <span className="margin-note">OPEN TO THE UNEXPECTED.</span>
+      <a className="obsessions-scroll" href="#obsessions" aria-label="Explore current obsessions"><span aria-hidden="true">↓</span></a>
     </section>
 
     <Obsessions />

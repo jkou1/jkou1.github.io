@@ -61,11 +61,13 @@ test('navigation wraps in both directions and preserves the selectable backgroun
     await page.locator('main').focus();
     await page.keyboard.press(key);
     await expect(page.getByRole('heading', { name: /Style is the difference/ })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Test song' })).toBeVisible();
   }
   await page.getByRole('button', { name: 'Previous page: The board' }).click();
   await expect(page.getByRole('heading', { name: /The board/ })).toBeVisible();
   await page.getByRole('button', { name: 'Next page: Home' }).click();
   await expect(page.getByRole('heading', { name: /Style is the difference/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Test song' })).toBeVisible();
   expect(await artwork!.evaluate(element => element.isConnected)).toBe(true);
   await expect(page.locator('.home-ascii').first()).toHaveText(drawing!);
 });
