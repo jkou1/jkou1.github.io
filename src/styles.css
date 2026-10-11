@@ -102,6 +102,7 @@
 
 @media(max-width:760px){.wordmark{font-size:24px}.site-header nav a{font-size:10px}.section-heading h2{font-size:27px}.board-teaser h2{font-size:32px}.board-heading h1{font-size:clamp(50px,10vw,75px)}}
 
+#main:focus{outline:none}
 .art-hero{position:relative;height:calc(100svh - 112px);min-height:360px;pointer-events:none}
 .art-hero .spotify-card{top:clamp(20px,7svh,90px);right:4%;width:315px;margin:0;pointer-events:auto;transform:rotate(3deg)}
 .art-hero .drag-handle{cursor:grab;touch-action:none}
