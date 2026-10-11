@@ -2,32 +2,57 @@ import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
   await page.route('**/api/now-playing', route => route.fulfill({ json: { status: 'playing', title: 'Test song', artist: 'Test artist', durationMs: 240000, progressMs: 64000, fetchedAt: Date.now(), url: 'https://open.spotify.com/track/test' } }));
+  // Simulate Pinterest's delayed bootstrap and replacement of the embed anchor.
+  await page.route('https://assets.pinterest.com/js/pinit.js', route => route.fulfill({ contentType: 'application/javascript', body: `
+    setTimeout(() => {
+      window.PinUtils = { build(host) {
+        const anchor = host.querySelector('[data-pin-do="embedBoard"]');
+        if (!anchor) return;
+        const preview = document.createElement('div');
+        preview.dataset.testid = 'pinterest-preview';
+        preview.dataset.boardUrl = anchor.href;
+        preview.textContent = 'Pinterest board preview';
+        preview.style.height = '600px';
+        anchor.replaceWith(preview);
+      } };
+    }, 100);
+  ` }));
 });
 
-test('keyboard navigation, history, modal, filters, and direct board links', async ({ page }) => {
+test('keyboard navigation, history, Pinterest embed, and direct board links', async ({ page }) => {
+  let scriptRequests = 0;
+  page.on('request', request => { if (request.url() === 'https://assets.pinterest.com/js/pinit.js') scriptRequests++; });
   await page.goto('/');
   await expect(page.getByRole('heading', { name: /A work in progress/ })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Test song' })).toBeVisible();
+  expect(scriptRequests).toBe(0);
   await page.keyboard.press('d');
   await expect(page).toHaveURL(/\/board\/$/);
   await expect(page.getByRole('heading', { name: /The board/ })).toBeVisible();
-  const pin = page.getByRole('button', { name: 'Enlarge A study in orbit' });
-  await pin.click();
-  await expect(page.getByRole('dialog')).toBeVisible();
-  await page.keyboard.press('a');
-  await expect(page).toHaveURL(/\/board\/$/);
-  await page.keyboard.press('Escape');
-  await expect(page.getByRole('dialog')).not.toBeVisible();
-  await expect(pin).toBeFocused();
-  await page.getByRole('button', { name: 'Spaces', exact: true }).click();
-  await expect(page.getByRole('button', { name: /^Enlarge/ })).toHaveCount(2);
+  const boardUrl = 'https://www.pinterest.com/DJDAIMY0/retro-futuristic-fashion/';
+  await expect(page.getByTestId('pinterest-preview')).toHaveAttribute('data-board-url', boardUrl);
+  await expect(page.getByRole('link', { name: 'Open board on Pinterest' })).toHaveAttribute('href', boardUrl);
+  await expect(page.getByRole('button', { name: /^Enlarge/ })).toHaveCount(0);
   await page.locator('main').focus();
   await page.keyboard.press('ArrowLeft');
   await expect(page.getByRole('heading', { name: /A work in progress/ })).toBeVisible();
   await page.goBack();
   await expect(page.getByRole('heading', { name: /The board/ })).toBeVisible();
+  await expect(page.getByTestId('pinterest-preview')).toHaveCount(1);
+  expect(scriptRequests).toBe(1);
   await page.reload();
   await expect(page.getByRole('heading', { name: /The board/ })).toBeVisible();
+  await expect(page.getByTestId('pinterest-preview')).toBeVisible();
+});
+
+test('Pinterest script failure keeps the direct board link usable', async ({ page }) => {
+  await page.route('https://assets.pinterest.com/js/pinit.js', route => route.abort());
+  await page.goto('/board/');
+  await expect(page.getByRole('status')).toContainText('The Pinterest preview is unavailable.');
+  await expect(page.getByRole('link', { name: 'Open board on Pinterest' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'view the board on Pinterest', exact: false })).toHaveAttribute('href', 'https://www.pinterest.com/DJDAIMY0/retro-futuristic-fashion/');
+  await page.getByRole('button', { name: 'Previous page: Home' }).click();
+  await expect(page.getByRole('heading', { name: /A work in progress/ })).toBeVisible();
 });
 
 test('WASD respects typing, modifiers, and reduced motion', async ({ page }) => {
@@ -57,6 +82,7 @@ test('responsive layout and player collapse', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Test song' })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.goto('/board/');
+  await expect(page.getByTestId('pinterest-preview')).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 

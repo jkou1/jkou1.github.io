@@ -3,7 +3,7 @@ export const profile = {
   intro: 'A little corner of the internet for things I make, things I find, and whatever comes next.',
   github: 'https://github.com/jkou1',
   email: '',
-  pinterest: '',
+  pinterest: 'https://www.pinterest.com/DJDAIMY0/retro-futuristic-fashion/',
 };
 
 // Replace these starter entries with your own projects. An empty URL displays a preview badge.

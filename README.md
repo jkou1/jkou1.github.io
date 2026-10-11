@@ -26,30 +26,24 @@ npm run preview    # Static build preview (no API; use npm run dev for Spotify)
 - Right / Down / D / S: move to the board.
 - Left / Up / A / W: move home.
 - Links and the floating navigation control also switch pages.
-- Shortcuts do not intercept typing, modifier combinations, focused controls, or an open image dialog. Held keys do not repeat transitions.
-- Click a board image to enlarge it; close with Escape, the close button, or the backdrop. Focus returns to the original image. Page content is inert while the dialog is open.
+- Shortcuts do not intercept typing, modifier combinations, or focused controls. Held keys do not repeat transitions.
+- The second page embeds the Retro futuristic fashion Pinterest board using Pinterest's own layout and interactions. A direct board link remains available if the widget is blocked or unavailable.
 - Drag the listening window by its title bar on desktop; it sits in the document flow on mobile. The minus button minimizes it.
 - Reduced-motion settings disable continuous animation and simplify transitions.
 
 ## Personalize the content
 
-Edit `src/content.ts` for your name, introduction, project information, GitHub URL, optional email, and optional Pinterest board URL. The current project cards are explicitly labeled concept previews, not claims about completed work.
+Edit `src/content.ts` for your name, introduction, project information, GitHub URL, optional email, and Pinterest board URL. The current project cards are explicitly labeled concept previews, not claims about completed work.
 
-Edit `src/board.json` to replace the eight original SVG placeholder studies with your chosen images:
+## Pinterest board
 
-```json
-{
-  "id": "unique-pin-id",
-  "title": "Your caption",
-  "category": "Spaces",
-  "image": "/images/my-image.webp",
-  "alt": "A meaningful description of the image",
-  "pinUrl": "https://www.pinterest.com/pin/YOUR_PIN_ID/",
-  "sample": false
-}
-```
+The second page uses Pinterest's official board widget for `https://www.pinterest.com/DJDAIMY0/retro-futuristic-fashion/`. Save pins to that public board in Pinterest; Pinterest supplies the embedded preview (up to 50 pins). The preview shows this specific board, rather than every saved item across your account.
 
-Put images you can use in `public/images/`. All starter art in `public/art/` was authored for this project. The gallery is manually curated; it does not automatically import or scrape Pinterest. The category filters are derived from the JSON file. Add the board URL to `profile.pinterest` to display a Pinterest link. Colors and typography live in `src/styles.css`; fonts currently load from Google Fonts, with system fallbacks.
+To switch boards, update `profile.pinterest` in `src/content.ts` with the full public board URL (resolve `pin.it` share links first), and update the board title in `src/Board.tsx`. No Pinterest app, API credentials, or visitor login is required to request the widget. Pinterest controls the preview's contents and refresh timing.
+
+The widget script loads only when the board page is visited and is reused on return visits. Its DOM is managed separately from React. If Pinterest is unavailable or blocked, visitors can still use the direct board links. The old placeholder gallery, filters, and image dialog have been replaced by Pinterest's own layout.
+
+Colors and typography live in `src/styles.css`; fonts currently load from Google Fonts, with system fallbacks. All starter art in `public/art/` was authored for this project; two images are still used by the home page's project previews.
 
 ## Connect Spotify
 
@@ -131,3 +125,4 @@ After verifying the Vercel deployment, unpublish the old Pages site under **GitH
 - [Spotify redirect URI rules](https://developer.spotify.com/documentation/web-api/concepts/redirect_uri)
 - [Spotify development mode](https://developer.spotify.com/documentation/web-api/concepts/quota-modes)
 - [Motion shared layout animations](https://motion.dev/docs/react-layout-animations)
+- [Pinterest board widgets](https://developers.pinterest.com/docs/web-features/widgets/)

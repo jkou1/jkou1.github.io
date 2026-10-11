@@ -10,7 +10,6 @@ const getPage = (): Page => window.location.pathname.replace(/\/$/, '') === '/bo
 export function App() {
   const [page, setPage] = useState<Page>(getPage);
   const [direction, setDirection] = useState(1);
-  const [modalOpen, setModalOpen] = useState(false);
   const reduced = useReducedMotion();
   const main = useRef<HTMLElement>(null);
   const hasNavigated = useRef(false);
@@ -18,7 +17,6 @@ export function App() {
   const queuedPage = useRef<Page | null>(null);
 
   const navigate = useCallback((next: Page, push = true) => {
-    if (modalOpen) return;
     if (next === page) { queuedPage.current = null; return; }
     if (transitioning.current) { queuedPage.current = next; return; }
     transitioning.current = true;
@@ -26,7 +24,7 @@ export function App() {
     setDirection(next === 'board' ? 1 : -1);
     if (push) window.history.pushState({}, '', next === 'board' ? '/board/' : '/');
     setPage(next);
-  }, [page, modalOpen]);
+  }, [page]);
 
   useEffect(() => {
     const onPop = () => {
@@ -36,24 +34,23 @@ export function App() {
       hasNavigated.current = true;
       const next = getPage();
       setDirection(next === 'board' ? 1 : -1);
-      setModalOpen(false);
       setPage(next);
     };
     const onKey = (event: KeyboardEvent) => {
-      const next = pageForKey(event, event.target, modalOpen);
+      const next = pageForKey(event, event.target);
       if (next && next !== page) { event.preventDefault(); navigate(next); }
     };
     window.addEventListener('popstate', onPop);
     window.addEventListener('keydown', onKey);
     return () => { window.removeEventListener('popstate', onPop); window.removeEventListener('keydown', onKey); };
-  }, [navigate, modalOpen, page]);
+  }, [navigate, page]);
 
   useEffect(() => {
     document.title = page === 'home' ? `${profile.name} — A work in progress` : `The board — ${profile.name}`;
   }, [page]);
 
   return <>
-    <div className="site-shell" inert={modalOpen}>
+    <div className="site-shell">
       <a className="skip-link" href="#main">Skip to content</a>
       <header className="site-header">
         <a className="wordmark" href="/" onClick={event => { if (!event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) { event.preventDefault(); navigate('home'); } }}>{profile.name.toLowerCase()}<span>✳</span></a>
@@ -69,7 +66,7 @@ export function App() {
             variants={{ enter: (d: number) => ({ opacity: 0, x: reduced ? 0 : d * 65 }), visible: { opacity: 1, x: 0 }, exit: (d: number) => ({ opacity: 0, x: reduced ? 0 : -d * 65 }) }}
             initial="enter" animate="visible" exit="exit" transition={{ duration: reduced ? 0.01 : 0.3, ease: [0.22, 1, 0.36, 1] }}
             onAnimationComplete={definition => { if (definition === 'visible') { transitioning.current = false; if (hasNavigated.current) main.current?.focus({ preventScroll: true }); const queued = queuedPage.current; queuedPage.current = null; if (queued) navigate(queued); } }}>
-            {page === 'home' ? <Home onBoard={() => navigate('board')} /> : <Board onModalChange={setModalOpen} />}
+            {page === 'home' ? <Home onBoard={() => navigate('board')} /> : <Board />}
           </motion.div>
         </AnimatePresence>
       </main>
