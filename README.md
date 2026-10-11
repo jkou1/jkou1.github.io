@@ -45,7 +45,7 @@ The widget script loads only when the board page is visited and is reused on ret
 
 Colors and typography live in `src/styles.css`; fonts currently load from Google Fonts, with system fallbacks. All starter art in `public/art/` was authored for this project; two images are still used by the home page's project previews.
 
-The supplied `ascii-art.txt` and `ascii-art (1).txt` are rendered as transparent SVGs in `public/art/ascii-upper-left.svg` and `public/art/ascii-lower-right.svg`. They decorate the upper-left and lower-right corners of the home page, scale without cropping, and do not intercept clicks. The footer reserves space for the lower artwork above the floating navigation.
+The supplied `ascii-art.txt` and `ascii-art (1).txt` are rendered as transparent SVGs in `public/art/ascii-upper-left.svg` and `public/art/ascii-lower-right.svg`. The large illustrations stay fixed in the upper-left and lower-right screen corners while the home page scrolls. Responsive sizing keeps both shapes uncropped, and a faint blend keeps them visible over cards without intercepting clicks.
 
 ## Connect Spotify
 

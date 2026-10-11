@@ -1,6 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
-#root{position:relative;isolation:isolate}.home-backdrop{position:absolute;inset:0;pointer-events:none;z-index:0}.home-ascii{position:absolute;display:block;object-fit:contain;opacity:.55;width:auto;height:auto;max-width:calc(100% - 32px);user-select:none}.home-ascii-upper-left{top:16px;left:16px;width:clamp(110px,11vw,160px)}.home-ascii-lower-right{right:16px;bottom:88px;width:clamp(180px,27vw,400px)}.site-shell{position:relative;z-index:1}.site-shell.is-home .site-footer{padding-bottom:clamp(236px,calc(18.62vw + 112px),388px)}
+#root{position:relative;isolation:isolate}
+/* Blend the art over surfaces so opaque cards cannot hide parts of either shape. */
+.home-backdrop{position:fixed;inset:0;pointer-events:none;z-index:2;mix-blend-mode:multiply}
+.home-ascii{position:absolute;display:block;object-fit:contain;opacity:.35;height:auto;max-width:calc(100% - 32px);user-select:none}
+.home-ascii-upper-left{top:16px;left:16px;width:min(clamp(180px,28vw,420px),calc((50svh - 32px)*.7372))}
+.home-ascii-lower-right{right:16px;bottom:16px;width:min(clamp(260px,36vw,540px),calc((50svh - 32px)*1.45))}
+.site-shell{position:relative;z-index:1}
 
 :root{font-family:'DM Sans',Arial,sans-serif;color:#303e45;background:linear-gradient(135deg,#e5ebea 0%,#dce6e8 52%,#e4e4dc 100%);background-attachment:fixed;font-synthesis:none;--paper:#e2e7e7;--ink:#303e45;--muted:#52666f;--line:#52697133;--accent:#568789;--ice:#bdd8dc;--sage:#b9cbbf;--silver:#d0dade;--sand:#ded7c9;--denim:#687f92;--mono:'IBM Plex Mono',monospace}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:30px}body{margin:0}button,a{-webkit-tap-highlight-color:transparent}button,input{font:inherit}button,a{touch-action:manipulation}button{color:inherit}a{color:inherit;text-decoration:none}button{cursor:pointer}button:disabled{cursor:default}img{display:block;width:100%}button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid #446f7c;outline-offset:6px}::selection{color:#303e45;background:#b8ced8}.serif{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:400}.accent{color:var(--accent)}.site-shell{max-width:1800px;margin:auto;padding:0 5.3%;overflow:clip}.skip-link{position:fixed;top:-100px;background:var(--ink);color:var(--paper);padding:14px;z-index:100}.skip-link:focus{top:10px}
