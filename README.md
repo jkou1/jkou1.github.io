@@ -1,6 +1,6 @@
 # Johan’s portfolio
 
-A two-page portfolio built with React, TypeScript, Vite, Motion, and CSS. The Gen X Soft Club palette combines washed teal and aqua, steel blue and twilight, sage, jade and pale olive, chalky white, silver, warm beige and tan, and deep slate and faded denim accents. Glass gradients on the Spotify window, chrome navigation, and soft green collection panels carry these colors across both pages. Vercel hosts both the frontend and the Spotify API function at `/api/now-playing`. No paid animation tools, database, or Pinterest API are required.
+A two-page portfolio built with React, TypeScript, Vite, Motion, and CSS. The Gen X Soft Club palette combines washed teal and aqua, steel blue and twilight, sage, jade and pale olive, chalky white, silver, warm beige and tan, and deep slate and faded denim accents. Opaque ice-and-seafoam gradients on the Spotify window, chrome navigation, and soft green collection panels carry these colors across both pages. Vercel hosts both the frontend and the Spotify API function at `/api/now-playing`. No paid animation tools, database, or Pinterest API are required.
 
 ## Run locally
 
@@ -39,7 +39,7 @@ Edit `src/content.ts` for your name, introduction, project information, GitHub U
 
 ## Pinterest board
 
-The second page uses Pinterest's official board widget for `https://www.pinterest.com/DJDAIMY0/retro-futuristic-fashion/`. Save pins to that public board in Pinterest; Pinterest supplies the embedded preview (up to 50 pins). The preview shows this specific board, rather than every saved item across your account.
+The second page uses Pinterest's official board widget for `https://www.pinterest.com/DJDAIMY0/retro-futuristic-fashion/`. Save pins to that public board in Pinterest; Pinterest supplies the embedded preview (up to 50 pins). The preview shows this specific board, rather than every saved item across your account. A sage-and-silver panel with Neuropol typography, a chalk-white inset, and responsive spacing integrates the official widget with the site; Pinterest still controls its native pin layout and interactions.
 
 To switch boards, update `profile.pinterest` in `src/content.ts` with the full public board URL (resolve `pin.it` share links first), and update the board title in `src/Board.tsx`. No Pinterest app, API credentials, or visitor login is required to request the widget. Pinterest controls the preview's contents and refresh timing.
 
@@ -47,7 +47,7 @@ The widget script loads only when the board page is visited and is reused on ret
 
 Colors and typography live in `src/styles.css`; fonts currently load from Google Fonts, with system fallbacks. All starter art in `public/art/` was authored for this project; two images are still used by the home page's project previews.
 
-The supplied `ascii-art.txt` and `ascii-art (1).txt` are rendered as transparent SVGs in `public/art/ascii-upper-left.svg` and `public/art/ascii-lower-right.svg`. The large illustrations stay fixed in the upper-left and lower-right screen corners while the home page scrolls. Responsive sizing keeps both shapes uncropped, and a faint blend keeps them visible over cards without intercepting clicks.
+The supplied `ascii-art.txt` and `ascii-art (1).txt` are rendered as transparent SVGs in `public/art/ascii-upper-left.svg` and `public/art/ascii-lower-right.svg`. The large illustrations stay fixed in the upper-left and lower-right screen corners while the home page scrolls. Responsive sizing keeps both shapes uncropped, and the illustrations sit behind opaque cards without intercepting clicks.
 
 ## Connect Spotify
 

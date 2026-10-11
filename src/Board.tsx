@@ -63,9 +63,14 @@ export function Board() {
   return <section className="board-page">
     <div className="eyebrow"><span className="status-dot" /> A COLLECTION, NEVER COMPLETE</div>
     <div className="board-heading"><h1>The <span className="serif">board.</span><span className="accent">*</span></h1><p>A few things that caught my eye.<br />Saved on Pinterest, collected here.</p></div>
-    <div className="board-toolbar"><span className="board-label">RETRO FUTURISTIC FASHION</span><a className="board-link" href={profile.pinterest} target="_blank" rel="noreferrer">Open board on Pinterest ↗</a></div>
-    <div className="pinterest-board" ref={container} aria-label="Retro futuristic fashion Pinterest board" />
-    <p className="pinterest-help" role={unavailable ? 'status' : undefined}>{unavailable ? 'The Pinterest preview is unavailable. ' : 'If the preview doesn’t appear, '}<a href={profile.pinterest} target="_blank" rel="noreferrer">view the board on Pinterest ↗</a></p>
+    <section className={`pinterest-panel${unavailable ? ' is-unavailable' : ''}`} aria-labelledby="collection-title">
+      <div className="board-toolbar"><span className="board-label"><span className="status-dot" aria-hidden="true" /> SAVED ON PINTEREST</span><a className="board-link" href={profile.pinterest} target="_blank" rel="noreferrer">Open board on Pinterest ↗</a></div>
+      <div className="pinterest-panel-body">
+        <div className="pinterest-intro"><span className="pinterest-mark" aria-hidden="true">✳</span><div><h2 id="collection-title">Retro futuristic fashion</h2><p>An evolving collection of shapes, textures, and silhouettes.</p></div></div>
+        <div className="pinterest-stage"><div className="pinterest-board" ref={container} aria-label="Retro futuristic fashion Pinterest board" /></div>
+        <p className="pinterest-help" role={unavailable ? 'status' : undefined}>{unavailable ? 'The Pinterest preview is unavailable. ' : 'If the preview doesn’t appear, '}<a href={profile.pinterest} target="_blank" rel="noreferrer">view the board on Pinterest ↗</a></p>
+      </div>
+    </section>
     <div className="board-end"><span className="accent" aria-hidden="true">✳</span><p>There’s always something else to find.</p></div>
   </section>;
 }
