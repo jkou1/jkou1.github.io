@@ -1,6 +1,6 @@
 # Johan’s portfolio
 
-A two-page portfolio built with React, TypeScript, Vite, Motion, and CSS. The Gen X Soft Club palette combines washed teal and aqua, steel blue, sage and jade, chalky white, silver-gray, warm beige, and deep slate accents. Vercel hosts both the frontend and the Spotify API function at `/api/now-playing`. No paid animation tools, database, or Pinterest API are required.
+A two-page portfolio built with React, TypeScript, Vite, Motion, and CSS. The Gen X Soft Club palette combines washed teal and aqua, steel blue and twilight, sage, jade and pale olive, chalky white, silver, warm beige and tan, and deep slate and faded denim accents. Glass gradients on the Spotify window, chrome navigation, and soft green collection panels carry these colors across both pages. Vercel hosts both the frontend and the Spotify API function at `/api/now-playing`. No paid animation tools, database, or Pinterest API are required.
 
 ## Run locally
 
