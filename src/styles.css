@@ -12,7 +12,7 @@
 /* The same selectable artwork stays fixed behind both pages. */
 .home-backdrop{position:fixed;inset:0;pointer-events:none;z-index:0}
 .ascii-panel{position:absolute;pointer-events:none}
-.ascii-panel-left{left:1.5vw;bottom:18px;width:64vw;height:calc(100svh - 116px);color:#536e83}
+.ascii-panel-left{left:1.5vw;bottom:4px;width:64vw;height:calc(100svh - 200px);color:#536e83}
 .ascii-panel-right{right:2vw;bottom:12svh;width:48vw;height:64svh;color:#4f7669}
 .home-ascii{position:absolute;bottom:0;margin:0;width:max-content;font:10px/1 monospace;white-space:pre;user-select:text;-webkit-user-select:text;pointer-events:auto;cursor:text}
 .ascii-panel-right .home-ascii{right:0}
@@ -104,32 +104,42 @@
 
 #main:focus{outline:none}
 .art-hero{position:relative;height:calc(100svh - 112px);min-height:360px;pointer-events:none}
-.art-hero .spotify-card{top:clamp(20px,7svh,90px);right:4%;width:315px;margin:0;pointer-events:auto;transform:rotate(3deg)}
+.art-hero .spotify-card{top:clamp(20px,7svh,90px);right:4%;width:280px;margin:0;pointer-events:auto;transform:rotate(3deg)}
+.art-hero .player-body{padding:16px}
+.art-hero .player-status{margin-bottom:14px}
+.art-hero .album-art,.art-hero .record-sleeve{width:58px;height:58px}
+.art-hero .track-info h2{font-size:14px}
+.art-hero .track-progress{margin-top:16px}
+.art-hero .equalizer{height:56px}
 .art-hero .drag-handle{cursor:grab;touch-action:none}
 .art-hero .drag-handle:active{cursor:grabbing}
 .site-brand{min-width:0;max-width:42%;display:flex;flex-direction:column;align-items:flex-start;gap:9px}
 .site-brand .wordmark{white-space:nowrap}
-.brand-quote{margin:0;max-width:360px;font:400 9px/1.6 var(--display);letter-spacing:-.025em;color:var(--muted)}
+.home-quote{position:absolute;top:calc(50svh - 112px);left:50%;transform:translate(-50%,-50%);width:360px;max-width:80%;margin:0;font:400 clamp(10px,1vw,12px)/1.8 var(--display);letter-spacing:-.025em;color:var(--ink);text-align:center;text-shadow:-1px -1px 0 var(--paper),1px -1px 0 var(--paper),-1px 1px 0 var(--paper),1px 1px 0 var(--paper),0 0 8px var(--paper);pointer-events:auto;z-index:1}
 .obsessions-scroll{position:absolute;bottom:94px;left:50%;transform:translateX(-50%);width:48px;height:48px;display:grid;place-items:center;border:1px solid var(--steel);border-radius:50%;background:var(--chrome);color:var(--ink);font:26px/1 var(--mono);box-shadow:inset 0 1px 0 var(--chalk),0 6px 22px #303c421a;pointer-events:auto;z-index:3;transition:background .2s,box-shadow .2s}
 .obsessions-scroll:hover{background:var(--teal);box-shadow:inset 0 1px 0 var(--chalk),0 8px 24px #303c4226}
 .page-controls{position:fixed;bottom:max(22px,env(safe-area-inset-bottom));left:0;width:100%;z-index:5;display:flex;flex-direction:column;align-items:center;gap:12px;pointer-events:none}
 .page-controls .page-switcher{position:static;transform:none;pointer-events:auto}
-@media(max-width:1050px){.art-hero .spotify-card{width:285px;right:2%}}
+@media(max-width:1050px){
+  .art-hero .spotify-card{top:18px;width:260px;right:2%}
+  .art-hero .player-body{padding:12px}
+  .art-hero .player-status{margin-bottom:10px}
+  .art-hero .album-art,.art-hero .record-sleeve{width:52px;height:52px}
+  .art-hero .track-progress{margin-top:12px}
+  .art-hero .equalizer{height:40px}
+}
 @media(max-width:760px){
-  .site-header{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;height:105px;padding:19px 0 14px;gap:5px 15px}
-  .site-brand{display:contents}
-  .site-brand .wordmark{grid-column:1;grid-row:1;justify-self:start}
-  .site-header nav{grid-column:2;grid-row:1;gap:14px}
-  .brand-quote{grid-column:1/-1;grid-row:2;max-width:none;font-size:clamp(6px,2vw,9px);white-space:nowrap}
-  .ascii-panel-left{left:10px;bottom:18px;width:68vw;height:calc(100svh - 112px)}
+  .site-header nav{gap:14px}
+  .home-quote{top:calc(50svh - 85px)}
+  .ascii-panel-left{left:10px;bottom:4px;width:68vw;height:calc(100svh - 200px)}
   .ascii-panel-right{right:10px;bottom:30svh;width:max(40vw,200px);height:32svh}
-  .art-hero{height:calc(100svh - 105px);min-height:420px}
-  .art-hero .spotify-card{position:absolute;top:20px;right:0;width:min(280px,90%);margin:0;transform:none}
+  .art-hero{height:calc(100svh - 85px);min-height:420px}
+  .art-hero .spotify-card{position:absolute;top:8px;right:0;width:min(245px,90%);margin:0;transform:none}
   .page-controls{gap:9px}
 }
 @media(max-height:550px){
   .art-hero{min-height:0}
-  .art-hero .spotify-card{top:8px;width:min(245px,90%)}
+  .art-hero .spotify-card{top:8px;width:min(220px,90%)}
   .art-hero .player-body{padding:12px}
   .art-hero .player-status{margin-bottom:10px}
   .art-hero .track-progress{margin-top:12px}
@@ -137,8 +147,8 @@
 }
 @media(max-height:550px) and (min-width:761px){
   .site-header{height:76px}
-  .brand-quote{font-size:7px}
+  .home-quote{top:calc(50svh - 76px);max-width:280px;font-size:9px}
   .art-hero{height:calc(100svh - 76px)}
-  .ascii-panel-left{height:calc(100svh - 94px)}
+  .ascii-panel-left{height:calc(100svh - 140px)}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.equalizer.is-playing span{transform:scaleY(.6)}}

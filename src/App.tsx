@@ -55,7 +55,6 @@ export function App() {
       <header className="site-header">
         <div className="site-brand">
           <a className="wordmark" href="/" onClick={event => { if (!event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) { event.preventDefault(); navigate('home'); } }}>{profile.name.toLowerCase()}<span>✳</span></a>
-          {page === 'home' ? <h1 className="brand-quote">Style is the difference, a way of doing, a way of being done.</h1> : <p className="brand-quote">Style is the difference, a way of doing, a way of being done.</p>}
         </div>
         <nav aria-label="Main navigation">
           {(['home', 'board'] as Page[]).map((item, index) => <a key={item} href={item === 'home' ? '/' : '/board/'} aria-current={page === item ? 'page' : undefined} onClick={event => { if (!event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) { event.preventDefault(); navigate(item); } }}><span className="nav-index">0{index + 1}</span>{item === 'home' ? 'Home' : 'The board'}{page === item && <motion.span layoutId="nav-dot" className="nav-dot" />}</a>)}
@@ -91,6 +90,7 @@ function Home({ onBoard }: { onBoard: () => void }) {
   const hero = useRef<HTMLElement>(null);
   return <>
     <section className="art-hero" aria-label="ASCII artwork" ref={hero}>
+      <h1 className="home-quote">Style is the difference, a way of doing, a way of being done.</h1>
       <SpotifyCard constraints={hero} />
       <a className="obsessions-scroll" href="#obsessions" aria-label="Explore current obsessions"><span aria-hidden="true">↓</span></a>
     </section>
