@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { profile, projects } from './content';
+import { profile } from './content';
+import { Obsessions } from './Obsessions';
 import { Board } from './Board';
 import { SpotifyCard } from './SpotifyCard';
 import { pageForKey, type Page } from './navigation';
@@ -92,18 +93,12 @@ function Home({ onBoard }: { onBoard: () => void }) {
     <section className="hero" ref={hero}>
       <div className="eyebrow"><span className="status-dot" /> A PERSONAL SPACE ON THE INTERNET</div>
       <h1>Style is the <span className="serif">difference,</span>{' '}<br />a way of doing,{' '}<br />a way of being <span className="serif">done.</span><span className="hero-star" aria-hidden="true">✳</span></h1>
-      <div className="hero-bottom"><p>Hey, I’m {profile.name}.<br />{profile.intro}</p><a className="round-link" href="#selected-work" aria-label="Explore selected work">↓</a></div>
+      <div className="hero-bottom"><p>Hey, I’m {profile.name}.<br />{profile.intro}</p><a className="round-link" href="#obsessions" aria-label="Explore current obsessions">↓</a></div>
       <SpotifyCard constraints={hero} />
       <span className="margin-note">OPEN TO THE UNEXPECTED.</span>
     </section>
 
-    <section className="work-section" id="selected-work">
-      <div className="section-heading"><div><span className="eyebrow">01 / EXPLORATIONS</span><h2>On the <span className="serif">workbench.</span></h2></div><span className="section-note">A FEW IDEAS TAKING SHAPE ↙</span></div>
-      <div className="project-grid">{projects.map((project, index) => <article className="project" key={project.title}>
-        <div className="project-image"><img src={project.image} alt={project.title + ' — starter artwork'} loading="lazy" />{project.sample && <span className="sample-label">CONCEPT PREVIEW</span>}{project.url && <a className="project-open" href={project.url} target="_blank" rel="noreferrer" aria-label={`Open ${project.title}`}>↗</a>}</div>
-        <div className="project-meta"><h3>{project.title}</h3><span>0{index + 1} / {project.kind}</span></div><p>{project.description}</p>
-      </article>)}</div>
-    </section>
+    <Obsessions />
 
     <section className="board-teaser"><span className="eyebrow">02 / AN OPEN TAB IN MY BRAIN</span><div><h2>Good things<br />are worth <span className="serif">keeping.</span></h2><button className="pill-link" onClick={onBoard}>Explore the board <span>↗</span></button></div><p>A place for visual rabbit holes, interesting shapes,<br />and things that make me look twice.</p><span className="teaser-star" aria-hidden="true">✳</span></section>
   </>;

@@ -35,7 +35,19 @@ Neuropol by Ray Larabie is hosted locally in `public/fonts/neuropol.otf` for hea
 
 ## Personalize the content
 
-Edit `src/content.ts` for your name, introduction, project information, GitHub URL, optional email, and Pinterest board URL. The current project cards are explicitly labeled concept previews, not claims about completed work.
+Edit `src/content.ts` for your name, introduction, YouTube influences, GitHub URL, optional email, and Pinterest board URL.
+
+## Current obsessions
+
+The home page replaces the sample workbench with music and fashion influences. Add entries to the `obsessions` array in `src/content.ts`:
+
+```ts
+{ title: 'Your video title', url: 'https://www.youtube.com/watch?v=VIDEO_ID', category: 'Music', note: 'What keeps me coming back to it.' }
+```
+
+Replace `VIDEO_ID` with the actual video ID, or use a YouTube share, Shorts, live, or embed URL. `category` is `Music` or `Fashion`; `note` is optional. Entries appear in the order listed. The collection starts empty until you add your picks.
+
+Videos use responsive, lazily loaded YouTube embeds in privacy-enhanced mode, with native playback controls, fullscreen, and a direct YouTube link. No API key is needed. Videos do not autoplay. If a creator disables embedding or restricts playback, the direct link remains available. See [YouTube’s embedding instructions](https://support.google.com/youtube/answer/171780).
 
 ## Pinterest board
 
@@ -45,7 +57,7 @@ To switch boards, update `profile.pinterest` in `src/content.ts` with the full p
 
 The widget script loads only when the board page is visited and is reused on return visits. Its DOM is managed separately from React. If Pinterest is unavailable or blocked, visitors can still use the direct board links. The old placeholder gallery, filters, and image dialog have been replaced by Pinterest's own layout.
 
-Colors and typography live in `src/styles.css`; fonts currently load from Google Fonts, with system fallbacks. All starter art in `public/art/` was authored for this project; two images are still used by the home page's project previews.
+Colors and typography live in `src/styles.css`; Neuropol is hosted locally, while body and utility fonts load from Google Fonts with system fallbacks. Earlier starter art remains in `public/art/` but is no longer used by the home page.
 
 The supplied `ascii-art.txt` and `ascii-art (1).txt` are rendered as transparent SVGs in `public/art/ascii-upper-left.svg` and `public/art/ascii-lower-right.svg`. The large illustrations stay fixed in the upper-left and lower-right screen corners while the home page scrolls. Responsive sizing keeps both shapes uncropped, and the illustrations sit behind opaque cards without intercepting clicks.
 

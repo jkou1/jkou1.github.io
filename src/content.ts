@@ -6,8 +6,12 @@ export const profile = {
   pinterest: 'https://www.pinterest.com/DJDAIMY0/retro-futuristic-fashion/',
 };
 
-// Replace these starter entries with your own projects. An empty URL displays a preview badge.
-export const projects = [
-  { title: 'Personal space', kind: 'WEB / EXPLORATION', description: 'A home for ideas, experiments, and small discoveries.', image: '/art/orbit.svg', url: '', sample: true },
-  { title: 'Collected moments', kind: 'VISUAL / EXPLORATION', description: 'An ongoing study in color, composition, and paying attention.', image: '/art/arch.svg', url: '', sample: true },
-];
+export type Obsession = {
+  title: string;
+  url: string;
+  category: 'Music' | 'Fashion';
+  note?: string;
+};
+
+// Add your YouTube links here, with a title, category, and optional personal note.
+export const obsessions: Obsession[] = [];
