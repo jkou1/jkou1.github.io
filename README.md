@@ -39,13 +39,13 @@ Edit `src/content.ts` for your name, introduction, YouTube influences, GitHub UR
 
 ## Current obsessions
 
-The home page replaces the sample workbench with music and fashion influences. Add entries to the `obsessions` array in `src/content.ts`:
+The home page replaces the sample workbench with music, fashion, and motor influences. Add entries to the `obsessions` array in `src/content.ts`:
 
 ```ts
 { title: 'Your video title', url: 'https://www.youtube.com/watch?v=VIDEO_ID', category: 'Music', note: 'What keeps me coming back to it.' }
 ```
 
-Replace `VIDEO_ID` with the actual video ID, or use a YouTube share, Shorts, live, or embed URL. `category` is `Music` or `Fashion`; `note` is optional. Entries appear in the order listed. The collection starts empty until you add your picks.
+Replace `VIDEO_ID` with the actual video ID, or use a YouTube share, Shorts, live, or embed URL. `category` is `Music`, `Fashion`, or `Motors`; `note` is optional. Entries appear in the order listed. If the collection is empty, a placeholder appears until you add your picks.
 
 Videos use responsive, lazily loaded YouTube embeds in privacy-enhanced mode, with native playback controls, fullscreen, and a direct YouTube link. No API key is needed. Videos do not autoplay. If a creator disables embedding or restricts playback, the direct link remains available. See [YouTube’s embedding instructions](https://support.google.com/youtube/answer/171780).
 

@@ -9,9 +9,20 @@ export const profile = {
 export type Obsession = {
   title: string;
   url: string;
-  category: 'Music' | 'Fashion';
+  category: 'Music' | 'Fashion' | 'Motors';
   note?: string;
 };
 
 // Add your YouTube links here, with a title, category, and optional personal note.
-export const obsessions: Obsession[] = [];
+export const obsessions: Obsession[] = [
+  {
+    title: 'Yamaha R6 - Akrapovic Exaust',
+    url: 'https://www.youtube.com/watch?v=yVTY7Ti9Dws',
+    category: 'Motors',
+  },
+  {
+    title: 'TERIYAKI BOYZ - I still love H.E.R. feat.KANYE WEST',
+    url: 'https://www.youtube.com/watch?v=yVRbBpvdRRg',
+    category: 'Music',
+  },
+];

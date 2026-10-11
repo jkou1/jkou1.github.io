@@ -8,7 +8,7 @@ export function Obsessions() {
   });
 
   return <section className="obsessions-section" id="obsessions" aria-labelledby="obsessions-title">
-    <div className="section-heading"><div><span className="eyebrow">01 / INFLUENCES</span><h2 id="obsessions-title">Current obsessions.</h2></div><span className="section-note">MUSIC / FASHION / ON REPEAT</span></div>
+    <div className="section-heading"><div><span className="eyebrow">01 / INFLUENCES</span><h2 id="obsessions-title">Current obsessions.</h2></div><span className="section-note">MUSIC / FASHION / MOTORS</span></div>
     <p className="obsessions-intro">The sounds, silhouettes, and videos that shape my taste.</p>
     {videos.length ? <div className="obsession-grid">{videos.map((video, index) => <article className="obsession-card" key={video.id}>
       <div className="obsession-label"><span>{String(index + 1).padStart(2, '0')} / {video.category.toUpperCase()}</span><span aria-hidden="true">↗</span></div>
