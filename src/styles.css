@@ -9,11 +9,9 @@
 }
 
 #root{position:relative;isolation:isolate}
-/* Keep the fixed artwork behind the content and its opaque card surfaces. */
-.home-backdrop{position:fixed;inset:0;pointer-events:none;z-index:0}
-.home-ascii{position:absolute;display:block;object-fit:contain;opacity:.62;height:auto;max-width:calc(100% - 32px);user-select:none}
-.home-ascii-upper-left{top:16px;left:16px;width:min(clamp(260px,36vw,560px),calc((60svh - 32px)*.7372))}
-.home-ascii-lower-right{right:16px;bottom:16px;width:min(clamp(340px,46vw,720px),calc((56svh - 32px)*1.45))}
+/* Equal artwork panels stay fixed behind the opaque content surfaces. */
+.home-backdrop{position:fixed;inset:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));padding:122px 24px 110px;gap:24px;pointer-events:none;z-index:0}
+.home-ascii{display:block;width:100%;height:100%;min-height:0;object-fit:contain;opacity:1;user-select:none}
 .site-shell{position:relative;z-index:1}
 
 :root{
@@ -98,4 +96,25 @@
 .site-header nav a{font-size:12px}
 
 @media(max-width:760px){.wordmark{font-size:24px}.site-header nav a{font-size:10px}.section-heading h2{font-size:27px}.board-teaser h2{font-size:32px}.board-heading h1{font-size:clamp(50px,10vw,75px)}}
+
+.art-hero{height:calc(100svh - 112px);min-height:360px}
+.home-details{position:relative;min-height:410px;padding:50px 36px;border:1px solid var(--line);border-radius:10px;background:var(--chalk)}
+.home-details .hero-bottom{max-width:55%;gap:36px}
+.home-details .hero-bottom p{font-size:12px;max-width:310px}
+.home-details .spotify-card{top:40px;right:36px;width:315px}
+.home-details .margin-note{right:15px;bottom:25px;font-size:8px}
+.page-controls{position:fixed;bottom:max(22px,env(safe-area-inset-bottom));left:0;width:100%;z-index:5;display:flex;flex-direction:column;align-items:center;gap:12px;pointer-events:none}
+.page-controls .page-switcher{position:static;transform:none;pointer-events:auto}
+.home-caption{margin:0;max-width:calc(100% - 24px);padding:7px 10px;border-radius:4px;background:var(--chalk);font:400 clamp(5px,1.05vw,12px)/1.5 var(--display);letter-spacing:-.025em;white-space:nowrap;text-align:center;pointer-events:auto}
+@media(max-width:1050px){.home-details .spotify-card{width:285px;right:24px}.home-details{padding:40px 24px}.home-details .hero-bottom{max-width:50%;gap:16px}}
+@media(max-width:760px){
+  .home-backdrop{grid-template-columns:1fr;grid-template-rows:repeat(2,minmax(0,1fr));padding:95px 18px 110px;gap:16px}
+  .art-hero{height:calc(100svh - 85px);min-height:420px}
+  .home-details{padding:24px 20px;min-height:0}
+  .home-details .hero-bottom{max-width:none;gap:20px}
+  .home-details .hero-bottom p{font-size:11px}
+  .home-details .spotify-card{position:relative;top:auto;right:auto;width:min(100%,350px);margin:24px auto 0}
+  .page-controls{gap:9px}
+  .home-caption{padding:6px 7px;font-size:clamp(6px,2vw,11px)}
+}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.equalizer.is-playing span{transform:scaleY(.6)}}

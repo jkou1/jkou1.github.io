@@ -77,24 +77,26 @@ export function App() {
       </main>
 
       <footer className="site-footer"><span>© {new Date().getFullYear()} {profile.name}. Always in progress.</span><span>Made with curiosity <span className="accent">✳</span></span><a href={profile.github} target="_blank" rel="noreferrer">GitHub ↗</a></footer>
-      <div className="page-switcher" aria-label="Page shortcuts">
-        <button aria-label="Previous page: Home" onClick={() => navigate('home')} disabled={page === 'home'}>←</button>
-        <span><b>{page === 'home' ? '01' : '02'}</b><span className="switch-divider">/</span>02</span>
-        <button aria-label="Next page: The board" onClick={() => navigate('board')} disabled={page === 'board'}>→</button>
-        <span className="key-hint">ARROWS / WASD</span>
+      <div className="page-controls">
+        <div className="page-switcher" aria-label="Page shortcuts">
+          <button aria-label="Previous page: Home" onClick={() => navigate('home')} disabled={page === 'home'}>←</button>
+          <span><b>{page === 'home' ? '01' : '02'}</b><span className="switch-divider">/</span>02</span>
+          <button aria-label="Next page: The board" onClick={() => navigate('board')} disabled={page === 'board'}>→</button>
+          <span className="key-hint">ARROWS / WASD</span>
+        </div>
+        {page === 'home' && <h1 className="home-caption">Style is the difference, a way of doing, a way of being done.</h1>}
       </div>
     </div>
   </>;
 }
 
 function Home({ onBoard }: { onBoard: () => void }) {
-  const hero = useRef<HTMLElement>(null);
+  const details = useRef<HTMLElement>(null);
   return <>
-    <section className="hero" ref={hero}>
-      <div className="eyebrow"><span className="status-dot" /> A PERSONAL SPACE ON THE INTERNET</div>
-      <h1>Style is the <span className="serif">difference,</span>{' '}<br />a way of doing,{' '}<br />a way of being <span className="serif">done.</span><span className="hero-star" aria-hidden="true">✳</span></h1>
+    <section className="art-hero" aria-label="ASCII artwork" />
+    <section className="home-details" ref={details}>
       <div className="hero-bottom"><p>Hey, I’m {profile.name}.<br />{profile.intro}</p><a className="round-link" href="#obsessions" aria-label="Explore current obsessions">↓</a></div>
-      <SpotifyCard constraints={hero} />
+      <SpotifyCard constraints={details} />
       <span className="margin-note">OPEN TO THE UNEXPECTED.</span>
     </section>
 

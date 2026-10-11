@@ -59,7 +59,7 @@ The widget script loads only when the board page is visited and is reused on ret
 
 Colors and typography live in `src/styles.css`; Neuropol is hosted locally, while body and utility fonts load from Google Fonts with system fallbacks. Earlier starter art remains in `public/art/` but is no longer used by the home page.
 
-The supplied `ascii-art.txt` and `ascii-art (1).txt` are rendered as transparent SVGs in `public/art/ascii-upper-left.svg` and `public/art/ascii-lower-right.svg`. The large illustrations stay fixed in the upper-left and lower-right screen corners while the home page scrolls. Responsive sizing keeps both shapes uncropped, and the illustrations sit behind opaque cards without intercepting clicks.
+The supplied `ascii-art.txt` and `ascii-art (1).txt` are rendered as transparent SVGs in `public/art/ascii-upper-left.svg` and `public/art/ascii-lower-right.svg`. The illustrations fill equal halves of the opening screen, side by side on desktop and stacked on phones. Both remain uncropped and fixed while scrolling, behind opaque cards without intercepting clicks. The quote appears as a small single line beneath the fixed page selector; the introduction and Spotify window follow the artwork below the fold.
 
 ## Connect Spotify
 
