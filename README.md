@@ -31,6 +31,8 @@ npm run preview    # Static build preview (no API; use npm run dev for Spotify)
 - Drag the listening window by its title bar on desktop; it sits in the document flow on mobile. The minus button minimizes it.
 - Reduced-motion settings disable continuous animation and simplify transitions.
 
+Neuropol by Ray Larabie is hosted locally in `public/fonts/neuropol.otf` for headings, the wordmark, and primary navigation. Body text uses DM Sans and utility labels use IBM Plex Mono. The original Neuropol release comes from [Typodermic’s CC0 public-domain collection](https://typodermicfonts.com/public-domain/); its supplied notice is included alongside the font.
+
 ## Personalize the content
 
 Edit `src/content.ts` for your name, introduction, project information, GitHub URL, optional email, and Pinterest board URL. The current project cards are explicitly labeled concept previews, not claims about completed work.
