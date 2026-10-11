@@ -23,7 +23,7 @@ test('keyboard navigation, history, Pinterest embed, and direct board links', as
   let scriptRequests = 0;
   page.on('request', request => { if (request.url() === 'https://assets.pinterest.com/js/pinit.js') scriptRequests++; });
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: /A work in progress/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Style is the difference/ })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Test song' })).toBeVisible();
   expect(scriptRequests).toBe(0);
   await page.keyboard.press('d');
@@ -35,7 +35,7 @@ test('keyboard navigation, history, Pinterest embed, and direct board links', as
   await expect(page.getByRole('button', { name: /^Enlarge/ })).toHaveCount(0);
   await page.locator('main').focus();
   await page.keyboard.press('ArrowLeft');
-  await expect(page.getByRole('heading', { name: /A work in progress/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Style is the difference/ })).toBeVisible();
   await page.goBack();
   await expect(page.getByRole('heading', { name: /The board/ })).toBeVisible();
   await expect(page.getByTestId('pinterest-preview')).toHaveCount(1);
@@ -52,7 +52,7 @@ test('Pinterest script failure keeps the direct board link usable', async ({ pag
   await expect(page.getByRole('link', { name: 'Open board on Pinterest' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'view the board on Pinterest', exact: false })).toHaveAttribute('href', 'https://www.pinterest.com/DJDAIMY0/retro-futuristic-fashion/');
   await page.getByRole('button', { name: 'Previous page: Home' }).click();
-  await expect(page.getByRole('heading', { name: /A work in progress/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Style is the difference/ })).toBeVisible();
 });
 
 test('WASD respects typing, modifiers, and reduced motion', async ({ page }) => {
@@ -68,7 +68,7 @@ test('WASD respects typing, modifiers, and reduced motion', async ({ page }) => 
   await page.keyboard.press('s');
   await expect(page.getByRole('heading', { name: /The board/ })).toBeVisible();
   await page.keyboard.press('w');
-  await expect(page.getByRole('heading', { name: /A work in progress/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Style is the difference/ })).toBeVisible();
 });
 
 test('responsive layout and player collapse', async ({ page }) => {

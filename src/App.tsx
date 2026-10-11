@@ -46,7 +46,7 @@ export function App() {
   }, [navigate, page]);
 
   useEffect(() => {
-    document.title = page === 'home' ? `${profile.name} — A work in progress` : `The board — ${profile.name}`;
+    document.title = page === 'home' ? `${profile.name} — Style is the difference` : `The board — ${profile.name}`;
   }, [page]);
 
   return <>
@@ -91,7 +91,7 @@ function Home({ onBoard }: { onBoard: () => void }) {
   return <>
     <section className="hero" ref={hero}>
       <div className="eyebrow"><span className="status-dot" /> A PERSONAL SPACE ON THE INTERNET</div>
-      <h1>A work<br />in <span className="serif">progress.</span><span className="hero-star" aria-hidden="true">✳</span></h1>
+      <h1>Style is the <span className="serif">difference,</span>{' '}<br />a way of doing,{' '}<br />a way of being <span className="serif">done.</span><span className="hero-star" aria-hidden="true">✳</span></h1>
       <div className="hero-bottom"><p>Hey, I’m {profile.name}.<br />{profile.intro}</p><a className="round-link" href="#selected-work" aria-label="Explore selected work">↓</a></div>
       <SpotifyCard constraints={hero} />
       <span className="margin-note">OPEN TO THE UNEXPECTED.</span>
