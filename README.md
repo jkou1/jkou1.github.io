@@ -87,7 +87,7 @@ Open the printed authorization URL. The helper validates OAuth state, exchanges 
 
 Restart `npm run dev` after authorizing. It reads server-only credentials from `.env.spotify` and serves `/api/now-playing` on the same local origin. There is no separate backend server to start and no frontend environment variable to configure.
 
-Play a track on Spotify; the window should update within about 20 seconds. Paused, idle, unsupported media, upstream errors, and expired authorization are handled without fabricating a listening history. If credentials are missing, the endpoint returns an explicit unconfigured state.
+Play a track on Spotify; the window should update within about 20 seconds. Each confirmed track is saved in the visitor's browser. Paused playback says “On pause”; idle responses, unsupported media, and temporary failures keep the previous track visible as “Last seen,” with its progress frozen and equalizer stopped. The saved track also appears immediately after reloads and returning from the board. A fresh browser still needs one successful track response, and clearing browser storage clears its saved track. If storage is unavailable, retention works in memory until the listening panel unmounts. This is a per-browser cache, not shared listening history or a database. If credentials are missing, the endpoint returns an explicit unconfigured state.
 
 ### 3. Add Spotify credentials to Vercel
 

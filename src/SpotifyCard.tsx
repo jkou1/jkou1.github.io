@@ -1,13 +1,18 @@
 import { useEffect, useRef, useState, type CSSProperties, type RefObject } from 'react';
 import { motion, useDragControls } from 'motion/react';
+import { hasTrack, isLive, parsePlayback, playbackCacheKey, playbackProgress, restorePlayback, retainPlayback, serializePlayback, type PlaybackState } from './spotify-playback';
 
-export type Playback = { status: 'playing' | 'paused' | 'idle'; title?: string; artist?: string; artwork?: string; url?: string; durationMs?: number; progressMs?: number; fetchedAt: number };
-type State = Playback | { status: 'unconfigured' | 'loading' | 'error'; fetchedAt: number };
 const format = (ms: number) => `${Math.floor(ms / 60000)}:${Math.floor(ms / 1000 % 60).toString().padStart(2, '0')}`;
 
 export function SpotifyCard({ constraints }: { constraints: RefObject<HTMLElement | null> }) {
   const endpoint = import.meta.env.VITE_SPOTIFY_ENDPOINT || '/api/now-playing';
-  const [state, setState] = useState<State>({ status: endpoint ? 'loading' : 'unconfigured', fetchedAt: 0 });
+  const [state, setState] = useState<PlaybackState>(() => {
+    try {
+      const saved = restorePlayback(localStorage.getItem(playbackCacheKey(endpoint)));
+      if (saved) return saved;
+    } catch { /* Storage can be disabled; retain tracks in memory instead. */ }
+    return { status: 'loading', fetchedAt: 0 };
+  });
   const [now, setNow] = useState(Date.now());
   const [collapsed, setCollapsed] = useState(false);
   const controls = useDragControls();
@@ -29,11 +34,18 @@ export function SpotifyCard({ constraints }: { constraints: RefObject<HTMLElemen
         const response = await fetch(endpoint, { signal: currentController.signal });
         if (response.status === 429) delay = Math.max(20000, Math.min(300000, (Number(response.headers.get('Retry-After')) || 30) * 1000));
         if (!response.ok) throw new Error('Playback unavailable');
-        const data = await response.json() as State;
-        if (!['playing', 'paused', 'idle', 'unconfigured'].includes(data.status) || !Number.isFinite(data.fetchedAt)) throw new Error('Invalid playback');
-        if ((data.status === 'playing' || data.status === 'paused') && (typeof data.title !== 'string' || typeof data.artist !== 'string' || !Number.isFinite(data.durationMs) || !Number.isFinite(data.progressMs))) throw new Error('Invalid track');
-        if (!disposed && controller === currentController) { setState(data); setNow(Date.now()); }
-      } catch { if (!disposed && controller === currentController) setState({ status: 'error', fetchedAt: Date.now() }); }
+        const data = parsePlayback(await response.json());
+        if (!disposed && controller === currentController) {
+          const receivedAt = Date.now();
+          setState(previous => retainPlayback(previous, data, receivedAt));
+          setNow(receivedAt);
+        }
+      } catch {
+        if (!disposed && controller === currentController) {
+          const receivedAt = Date.now();
+          setState(previous => retainPlayback(previous, { status: 'error', fetchedAt: receivedAt }, receivedAt));
+        }
+      }
       finally { clearTimeout(timeout); if (!disposed && controller === currentController && !document.hidden) timer.current = setTimeout(refresh, delay); }
     }
     function visibility() { clearTimeout(timer.current); if (!document.hidden) void refresh(); }
@@ -42,12 +54,17 @@ export function SpotifyCard({ constraints }: { constraints: RefObject<HTMLElemen
     return () => { disposed = true; clearTimeout(timer.current); controller?.abort(); document.removeEventListener('visibilitychange', visibility); };
   }, [endpoint]);
 
+  useEffect(() => {
+    if (!hasTrack(state)) return;
+    try { localStorage.setItem(playbackCacheKey(endpoint), serializePlayback(state, Date.now())); }
+    catch { /* Playback still works when browser storage is unavailable. */ }
+  }, [state, endpoint]);
+
   useEffect(() => { const interval = setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(interval); }, []);
-  const track = state.status === 'playing' || state.status === 'paused' ? state : null;
-  const fresh = now - state.fetchedAt < 60000;
-  const playing = state.status === 'playing' && fresh;
-  const progress = track ? Math.min(track.durationMs || 0, (track.progressMs || 0) + (playing ? Math.max(0, now - track.fetchedAt) : 0)) : 0;
-  const labels = { playing: fresh ? 'NOW PLAYING' : 'LAST SEEN', paused: 'ON PAUSE', idle: 'OFF THE RECORD', unconfigured: 'THE LISTENING ROOM', loading: 'TUNING IN', error: 'SIGNAL LOST' };
+  const track = hasTrack(state) ? state : null;
+  const playing = isLive(state, now);
+  const progress = track ? playbackProgress(track, now) : 0;
+  const labels = { playing: playing ? 'NOW PLAYING' : 'LAST SEEN', paused: 'ON PAUSE', 'last-seen': 'LAST SEEN', idle: 'OFF THE RECORD', unconfigured: 'THE LISTENING ROOM', loading: 'TUNING IN', error: 'SIGNAL LOST' };
 
   return <motion.aside aria-label="Spotify listening status" className={`spotify-card ${collapsed ? 'is-collapsed' : ''}`} drag dragControls={controls} dragListener={false} dragConstraints={constraints} dragElastic={0.06} dragMomentum={false}>
     <div className="player-header"><button className="drag-handle" aria-label="Drag listening window" onPointerDown={event => controls.start(event)}><span aria-hidden="true">⠿</span> SOUNDTRACK TO MY DAY</button><button className="collapse-button" aria-label={collapsed ? 'Expand listening window' : 'Minimize listening window'} aria-expanded={!collapsed} onClick={() => setCollapsed(!collapsed)}>{collapsed ? '+' : '−'}</button></div>
