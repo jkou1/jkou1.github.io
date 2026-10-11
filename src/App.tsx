@@ -4,57 +4,52 @@ import { profile } from './content';
 import { Obsessions } from './Obsessions';
 import { Board } from './Board';
 import { SpotifyCard } from './SpotifyCard';
+import { AsciiBackdrop } from './AsciiBackdrop';
 import { pageForKey, type Page } from './navigation';
 
 const getPage = (): Page => window.location.pathname.replace(/\/$/, '') === '/board' ? 'board' : 'home';
 
 export function App() {
   const [page, setPage] = useState<Page>(getPage);
+  const activePage = useRef(page);
   const [direction, setDirection] = useState(1);
   const reduced = useReducedMotion();
   const main = useRef<HTMLElement>(null);
   const hasNavigated = useRef(false);
-  const transitioning = useRef(false);
-  const queuedPage = useRef<Page | null>(null);
 
-  const navigate = useCallback((next: Page, push = true) => {
-    if (next === page) { queuedPage.current = null; return; }
-    if (transitioning.current) { queuedPage.current = next; return; }
-    transitioning.current = true;
+  const navigate = useCallback((next: Page, push = true, travelDirection?: number) => {
+    if (next === activePage.current) return;
     hasNavigated.current = true;
-    setDirection(next === 'board' ? 1 : -1);
+    setDirection(travelDirection ?? (next === 'board' ? 1 : -1));
     if (push) window.history.pushState({}, '', next === 'board' ? '/board/' : '/');
+    activePage.current = next;
     setPage(next);
-  }, [page]);
+  }, []);
 
   useEffect(() => {
     const onPop = () => {
       // History navigation must always win, including during an animation.
-      transitioning.current = false;
-      queuedPage.current = null;
       hasNavigated.current = true;
       const next = getPage();
       setDirection(next === 'board' ? 1 : -1);
+      activePage.current = next;
       setPage(next);
     };
     const onKey = (event: KeyboardEvent) => {
-      const next = pageForKey(event, event.target);
-      if (next && next !== page) { event.preventDefault(); navigate(next); }
+      const next = pageForKey(event, event.target, activePage.current);
+      if (next) { event.preventDefault(); navigate(next, true, ['arrowleft', 'arrowup', 'a', 'w'].includes(event.key.toLowerCase()) ? -1 : 1); }
     };
     window.addEventListener('popstate', onPop);
     window.addEventListener('keydown', onKey);
     return () => { window.removeEventListener('popstate', onPop); window.removeEventListener('keydown', onKey); };
-  }, [navigate, page]);
+  }, [navigate]);
 
   useEffect(() => {
     document.title = page === 'home' ? `${profile.name} — Style is the difference` : `The board — ${profile.name}`;
   }, [page]);
 
   return <>
-    {page === 'home' && <div className="home-backdrop" aria-hidden="true">
-      <img className="home-ascii home-ascii-upper-left" src="/art/ascii-upper-left.svg" alt="" />
-      <img className="home-ascii home-ascii-lower-right" src="/art/ascii-lower-right.svg" alt="" />
-    </div>}
+    <AsciiBackdrop />
     <div className="site-shell">
       <a className="skip-link" href="#main">Skip to content</a>
       <header className="site-header">
@@ -70,7 +65,7 @@ export function App() {
           <motion.div key={page} custom={direction}
             variants={{ enter: (d: number) => ({ opacity: 0, x: reduced ? 0 : d * 65 }), visible: { opacity: 1, x: 0 }, exit: (d: number) => ({ opacity: 0, x: reduced ? 0 : -d * 65 }) }}
             initial="enter" animate="visible" exit="exit" transition={{ duration: reduced ? 0.01 : 0.3, ease: [0.22, 1, 0.36, 1] }}
-            onAnimationComplete={definition => { if (definition === 'visible') { transitioning.current = false; if (hasNavigated.current) main.current?.focus({ preventScroll: true }); const queued = queuedPage.current; queuedPage.current = null; if (queued) navigate(queued); } }}>
+            onAnimationComplete={definition => { if (definition === 'visible' && activePage.current === page && hasNavigated.current) main.current?.focus({ preventScroll: true }); }}>
             {page === 'home' ? <Home onBoard={() => navigate('board')} /> : <Board />}
           </motion.div>
         </AnimatePresence>
@@ -79,9 +74,9 @@ export function App() {
       <footer className="site-footer"><span>© {new Date().getFullYear()} {profile.name}. Always in progress.</span><span>Made with curiosity <span className="accent">✳</span></span><a href={profile.github} target="_blank" rel="noreferrer">GitHub ↗</a></footer>
       <div className="page-controls">
         <div className="page-switcher" aria-label="Page shortcuts">
-          <button aria-label="Previous page: Home" onClick={() => navigate('home')} disabled={page === 'home'}>←</button>
+          <button aria-label={`Previous page: ${page === 'home' ? 'The board' : 'Home'}`} onClick={() => navigate(page === 'home' ? 'board' : 'home', true, -1)}>←</button>
           <span><b>{page === 'home' ? '01' : '02'}</b><span className="switch-divider">/</span>02</span>
-          <button aria-label="Next page: The board" onClick={() => navigate('board')} disabled={page === 'board'}>→</button>
+          <button aria-label={`Next page: ${page === 'home' ? 'The board' : 'Home'}`} onClick={() => navigate(page === 'home' ? 'board' : 'home', true, 1)}>→</button>
           <span className="key-hint">ARROWS / WASD</span>
         </div>
         {page === 'home' && <h1 className="home-caption">Style is the difference, a way of doing, a way of being done.</h1>}
@@ -91,12 +86,13 @@ export function App() {
 }
 
 function Home({ onBoard }: { onBoard: () => void }) {
-  const details = useRef<HTMLElement>(null);
+  const hero = useRef<HTMLElement>(null);
   return <>
-    <section className="art-hero" aria-label="ASCII artwork" />
-    <section className="home-details" ref={details}>
+    <section className="art-hero" aria-label="ASCII artwork" ref={hero}>
+      <SpotifyCard constraints={hero} />
+    </section>
+    <section className="home-details">
       <div className="hero-bottom"><p>Hey, I’m {profile.name}.<br />{profile.intro}</p><a className="round-link" href="#obsessions" aria-label="Explore current obsessions">↓</a></div>
-      <SpotifyCard constraints={details} />
       <span className="margin-note">OPEN TO THE UNEXPECTED.</span>
     </section>
 
